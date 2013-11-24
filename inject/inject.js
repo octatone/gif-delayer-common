@@ -54,9 +54,8 @@ function loadGif (gif) {
     var deferred = _loadingURLS[url] = new $.Deferred();
 
     $gif.before($loading);
-    var image = new Image();
 
-    image.addEventListener('load', function () {
+    gif.addEventListener('load', function () {
 
       if (!isResolved(deferred)) {
         log('load completed, resolving ' + url);
@@ -64,7 +63,7 @@ function loadGif (gif) {
       }
     });
     
-    image.addEventListener('abort', function (e) {
+    gif.addEventListener('abort', function (e) {
 
       if (!isResolved(deferred)) {
         warn('load aborted, resolving ' + url, e);
@@ -72,17 +71,15 @@ function loadGif (gif) {
       }
     });
     
-    image.addEventListener('error', function (e) {
+    gif.addEventListener('error', function (e) {
       
       if (!isResolved(deferred)) {
         warn('load errored, resolving ' + url, e);
         deferred.resolve();
       }
     });
-    
-    image.src = url;
-    
-    if (image.complete) {
+        
+    if (gif.complete) {
       if (!isResolved(deferred)) {
         log('already cached, resolving ' + url);
         deferred.resolve();
