@@ -28,7 +28,7 @@ function getGifs (context) {
   var image;
   for (var i=0, len=images.length; i < len; i++) {
     image = images[i];
-    if (/\.gif/.test(image.src)) {
+    if (/gif/.test(image.src)) {
       gifs.push(image);
     }
   }
