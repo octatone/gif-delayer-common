@@ -43,8 +43,13 @@ function loadGif (gif) {
   var $gif = $(gif).addClass('gif-delayer');
 
   function loaded () {
+    gif.src = '';
     $loading.remove();
     $gif.addClass('gif-delayer-loaded');
+    setTimeout(function () {
+      // hack to force starting from the beginning
+      gif.src = url;
+    }, 0);
   }
 
   if (!_loadedURLS[url] && !_loadingURLS[url]) {
@@ -62,7 +67,7 @@ function loadGif (gif) {
         deferred.resolve();
       }
     });
-    
+
     gif.addEventListener('abort', function (e) {
 
       if (!isResolved(deferred)) {
@@ -70,15 +75,15 @@ function loadGif (gif) {
         deferred.resolve();
       }
     });
-    
+
     gif.addEventListener('error', function (e) {
-      
+
       if (!isResolved(deferred)) {
         warn('load errored, resolving ' + url, e);
         deferred.resolve();
       }
     });
-        
+
     if (gif.complete) {
       if (!isResolved(deferred)) {
         log('already cached, resolving ' + url);
@@ -88,7 +93,7 @@ function loadGif (gif) {
   }
 
   $.when(_loadingURLS[url]).then(function () {
-    
+
     log('deferred resolved, reveailing gif(s) ' + url);
     _loadedURLS[url] = true;
     loaded();
@@ -108,13 +113,13 @@ function observe () {
 
   // select the target node
   var target = document.body;
-   
+
   // create an observer instance
   var observer = new MutationObserver(function (mutations) {
 
     var node;
     mutations.forEach(function (mutation) {
-    
+
       if (mutation.addedNodes && mutation.addedNodes.length) {
 
         for (var i=0, len=mutation.addedNodes.length; i<len; i++) {
@@ -130,7 +135,7 @@ function observe () {
       }
     });
   });
-   
+
   // configuration of the observer:
   var config = {
 
@@ -142,7 +147,7 @@ function observe () {
     // characterDataOldValue Set to true if characterData is set to true and target's data before the mutation needs to be recorded.
     // attributeFilter
   };
-   
+
   // pass in the target node, as well as the observer options
   observer.observe(target, config);
 }
