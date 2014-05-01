@@ -60,6 +60,11 @@ function loadGif (gif) {
 
     $gif.before($loading);
 
+    chrome.runtime.sendMessage({'url': url}, function (response) {
+
+      console.log(response.size);
+    });
+
     gif.addEventListener('load', function () {
 
       if (!isResolved(deferred)) {
