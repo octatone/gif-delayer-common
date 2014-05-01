@@ -1,9 +1,5 @@
-img[src*=gif] {
+img[src*=gif]:not(.gif-delayer-loaded) {
   visibility: hidden;
-}
-
-img[src*=gif].gif-delayer-loaded {
-  visibility: visible;
 }
 
 .gif-delayer-loading {
