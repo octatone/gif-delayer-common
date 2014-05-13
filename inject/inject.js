@@ -43,7 +43,7 @@ function loadGif (gif) {
   var $gif = $(gif).addClass('gif-delayer');
 
   function loaded () {
-    gif.src = '';
+    gif.src = undefined;
     $loading.remove();
     $gif.addClass('gif-delayer-loaded');
     setTimeout(function () {
