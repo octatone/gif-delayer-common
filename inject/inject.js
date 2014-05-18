@@ -1,18 +1,53 @@
 /* global $ */
 'use strict';
 
+var _loggingEnabled = false;
+
 var _loadedURLS = {};
 var _loadingURLS = {};
 var _logPrefix = '[GIF DELAYER] - ';
 
+function updateSize (data) {
+
+  var url = data.url;
+  var size = data.size;
+  var $loading = $('.gif-delayer-loading[data-url=\'' + url + '\']');
+  $loading.find('.size').text(size);
+}
+
+var port;
+if (chrome && chrome.runtime) {
+  port = chrome.runtime.connect({
+    'name': 'size'
+  });
+
+  port.onMessage.addListener(function (data) {
+
+    updateSize(data);
+  });
+}
+
+function postMessage (msg) {
+
+  if (port && port.postMessage) {
+    port.postMessage(msg);
+  }
+}
+
 function log (string, e) {
-  e = e || '';
-  console.log(_logPrefix + string, e);
+
+  if (_loggingEnabled) {
+    e = e || '';
+    console.log(_logPrefix + string, e);
+  }
 }
 
 function warn (string, e) {
-  e = e || '';
-  console.warn(_logPrefix + string, e);
+
+  if (_loggingEnabled) {
+    e = e || '';
+    console.warn(_logPrefix + string, e);
+  }
 }
 
 function isResolved (deferred) {
@@ -39,7 +74,7 @@ function getGifs (context) {
 function loadGif (gif) {
 
   var url = gif.src;
-  var $loading = $('<div class="gif-delayer-loading">Loading yer gif </div>');
+  var $loading = $('<div class="gif-delayer-loading" data-url="'+url+'">Loading <span class="size"></span> gif </div>');
   var $gif = $(gif).addClass('gif-delayer');
 
   function loaded () {
@@ -60,10 +95,7 @@ function loadGif (gif) {
 
     $gif.before($loading);
 
-    chrome.runtime.sendMessage({'url': url}, function (response) {
-
-      console.log(response.size);
-    });
+    postMessage({'url': url});
 
     gif.addEventListener('load', function () {
 
