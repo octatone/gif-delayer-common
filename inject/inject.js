@@ -43,12 +43,12 @@ function loadGif (gif) {
   var $gif = $(gif).addClass('gif-delayer');
 
   function loaded () {
-    gif.src = undefined;
+    $gif.removeAttr('src');
     $loading.remove();
     $gif.addClass('gif-delayer-loaded');
     setTimeout(function () {
       // hack to force starting from the beginning
-      gif.src = url;
+      $gif.attr('src', url);
     }, 0);
   }
 
