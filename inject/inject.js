@@ -1,6 +1,8 @@
 /* global $ */
 'use strict';
 
+var chrome = window.chrome;
+
 var _loggingEnabled = false;
 
 var _loadedURLS = {};
