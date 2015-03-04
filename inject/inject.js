@@ -78,12 +78,13 @@ function loadGif (gif) {
   var $gif = $(gif).addClass('gif-delayer');
 
   function loaded () {
-    gif.src = undefined;
+    // hack to force starting from the beginning
+    var parent = gif.parentNode;
+    parent.removeChild(gif);
     $loading.remove();
     $gif.addClass('gif-delayer-loaded');
     setTimeout(function () {
-      // hack to force starting from the beginning
-      gif.src = url;
+      parent.appendChild(gif);
     }, 0);
   }
 
