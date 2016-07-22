@@ -82,12 +82,14 @@ function loadGif (gif) {
   function loaded () {
     // hack to force starting from the beginning
     var parent = gif.parentNode;
-    parent.removeChild(gif);
+    if (parent) {
+      parent.removeChild(gif);
+      setTimeout(function () {
+        parent.appendChild(gif);
+      }, 0);
+    }
     $loading.remove();
     $gif.addClass('gif-delayer-loaded');
-    setTimeout(function () {
-      parent.appendChild(gif);
-    }, 0);
   }
 
   if (!_loadedURLS[url] && !_loadingURLS[url]) {
